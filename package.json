@@ -1,0 +1,23 @@
+{
+  "name": "tsdns2",
+  "version": "0.0.1",
+  "description": "Yet another NodeJS FOSS version of the TSDNS binary",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nodejs",
+    "foss",
+    "tsdns",
+    "teamspeak",
+    "teamspeak3"
+  ],
+  "author": "Maciej Krüger <mkg20001@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "minimatch": "^3.0.4",
+    "pino": "^5.0.1",
+    "yargs": "^12.0.1"
+  }
+}
