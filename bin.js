@@ -16,6 +16,17 @@ const argv = require('yargs')
     alias: 'n',
     desc: 'Disable watching'
   })
+  .option('port', {
+    alias: 'p',
+    default: 41144,
+    type: 'number',
+    desc: 'Port to listen on'
+  })
+  .option('host', {
+    alias: 'h',
+    default: '0.0.0.0',
+    desc: 'Host to listen on'
+  })
   .argv
 
 const settings = argv.config
@@ -34,7 +45,14 @@ const server = net.createServer(socket => readRequest(socket, (err, req) => {
   log.info({req, res}, 'Done')
   socket.write(res.return, () => socket.end())
 }))
-server.listen(41144)
+
+server.listen(argv, (err) => {
+  if (err) {
+    log.error(err, 'Listen failed')
+    return process.exit(2)
+  }
+  log.info(server.address(), 'Ready')
+})
 
 function load () {
   log.info('Reloading %s...', settings)
