@@ -1,6 +1,6 @@
 {
   "name": "tsdns2",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Yet another NodeJS FOSS version of the TSDNS binary",
   "main": "src/index.js",
   "bin": {
