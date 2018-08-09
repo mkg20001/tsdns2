@@ -14,28 +14,43 @@ function loadSettings (content) {
 
 function readRequest (socket, cb) {
   cb = once(cb)
-  let v = ''
-  setTimeout(() => cb(new Error('Request tock too long')), 10 * 1000)
+  socket.setEncoding('utf8')
+  socket.setNoDelay(true)
+  socket.setTimeout(1000)
+
   let done = false
-  socket.on('data', (data) => {
-    if (done) {
-      return
+
+  socket.once('data', (data) => {
+    let domain = String(data)
+    let oldFmt = true
+
+    if (domain.endsWith(END)) {
+      oldFmt = false
+      domain = domain.replace(END, '')
     }
-    if (v.length > 100) {
+
+    done = true
+
+    return cb(null, {domain, oldFmt})
+  })
+
+  socket.once('timeout', () => {
+    if (!done) {
       done = true
-      return cb(new Error('Request too long'))
-    }
-    v += data
-    if (v.endsWith(END)) {
-      v = v.replace(END, '')
-      done = true
-      return cb(null, {domain: v})
+      return cb(new Error('Timeout'))
     }
   })
-  socket.on('end', () => {
-    if (!done) { // previous ts3 clients use an old non-v6 fmt that terminates on close
+  socket.once('timeout', () => socket.destroy())
+  socket.once('error', (err) => {
+    if (!done) {
       done = true
-      return cb(null, {domain: v, oldFmt: true})
+      return cb(err)
+    }
+  })
+  socket.once('close', () => {
+    if (!done) {
+      done = true
+      return cb(new Error('Socket closed before request could be reaad'))
     }
   })
 }
@@ -50,6 +65,7 @@ function match (settings, req) {
     if (!firstV4) {
       return {found: match, return: '404'}
     }
+    return {found: match, return: firstV4}
   }
   return {found: match, return: match.value.join(',')}
 }

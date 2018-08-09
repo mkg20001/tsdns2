@@ -6,7 +6,7 @@ Yet another NodeJS FOSS version of the TSDNS binary
 
 - Supports the offical TSDNS Binary's config format
 - Watches the config file for changes
-- Logs requests and responses (using [pino](https://npmjs.com/packages/pino))
+- Logs requests and responses (using [pino](https://npmjs.com/package/pino))
 - Supports older TS3 clients too
 
 ## Usage
