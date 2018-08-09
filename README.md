@@ -17,6 +17,8 @@ Options:
   --version       Show version number                                  [boolean]
   --config, -c    Path to TSDNS config file      [default: "tsdns_settings.ini"]
   --no-watch, -n  Disable watching
+  --port, -p      Port to listen on                    [number] [default: 41144]
+  --host, -h      Host to listen on                         [default: "0.0.0.0"]
 ```
 
 ## Config format explanation
