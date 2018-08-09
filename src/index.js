@@ -31,7 +31,7 @@ function readRequest (socket, cb) {
 
     done = true
 
-    return cb(null, {domain, oldFmt})
+    return cb(null, {domain, oldFmt, remote: {address: socket.remoteAddress, port: socket.remotePort}})
   })
 
   socket.once('timeout', () => {
