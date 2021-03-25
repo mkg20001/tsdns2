@@ -7,8 +7,8 @@ const END = '\n\r\r\r\n'
 
 function loadSettings (content) {
   return content.split('\n').filter(l => !l.trim().startsWith('#') && l.trim()).map(l => {
-    let [domain, value] = l.split('=')
-    return {domain, value: value.split(' ')}
+    const [domain, value] = l.split('=')
+    return { domain, value: value.split(' ') }
   })
 }
 
@@ -20,7 +20,7 @@ function readRequest (socket, cb) {
 
   let done = false
 
-  socket.once('data', (data) => {
+  socket.once('data', data => {
     let domain = String(data)
     let oldFmt = true
 
@@ -31,7 +31,7 @@ function readRequest (socket, cb) {
 
     done = true
 
-    return cb(null, {domain, oldFmt, remote: {address: socket.remoteAddress, port: socket.remotePort}})
+    return cb(null, { domain, oldFmt, remote: { address: socket.remoteAddress, port: socket.remotePort } })
   })
 
   socket.once('timeout', () => {
@@ -41,7 +41,7 @@ function readRequest (socket, cb) {
     }
   })
   socket.once('timeout', () => socket.destroy())
-  socket.once('error', (err) => {
+  socket.once('error', err => {
     if (!done) {
       done = true
       return cb(err)
@@ -56,18 +56,18 @@ function readRequest (socket, cb) {
 }
 
 function match (settings, req) {
-  let match = settings.filter(s => glob(req.domain, s.domain))[0]
+  const match = settings.filter(s => glob(req.domain, s.domain))[0]
   if (!match) {
-    return {found: false, return: '404'}
+    return { found: false, return: '404' }
   }
   if (req.oldFmt) {
-    let firstV4 = match.value.filter(s => s.match(/^\d+\.\d+\.\d+\.\d+(:.+)*$/))[0]
+    const firstV4 = match.value.filter(s => s.match(/^\d+\.\d+\.\d+\.\d+(:.+)*$/))[0]
     if (!firstV4) {
-      return {found: match, return: '404'}
+      return { found: match, return: '404' }
     }
-    return {found: match, return: firstV4}
+    return { found: match, return: firstV4 }
   }
-  return {found: match, return: match.value.join(',')}
+  return { found: match, return: match.value.join(',') }
 }
 
 module.exports = {

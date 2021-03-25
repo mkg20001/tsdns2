@@ -3,10 +3,10 @@
 'use strict'
 
 const net = require('net')
-const log = require('pino')({name: 'tsdns'})
+const log = require('pino')({ name: 'tsdns' })
 const fs = require('fs')
 
-const {loadSettings, readRequest, match} = require('.')
+const { loadSettings, readRequest, match } = require('.')
 
 const argv = require('yargs')
   .option('config', {
@@ -35,7 +35,7 @@ const settings = argv.config
 let lSettings = []
 
 if (!fs.existsSync(settings)) {
-  log.error({file: settings}, 'Config file %s not found!', settings)
+  log.error({ file: settings }, 'Config file %s not found!', settings)
   return process.exit(2)
 }
 
@@ -43,12 +43,12 @@ const server = net.createServer(socket => readRequest(socket, (err, req) => {
   if (err) {
     return log.error(err, 'Invalid request')
   }
-  let res = match(lSettings, req)
-  log.info({req, res}, 'Done')
+  const res = match(lSettings, req)
+  log.info({ req, res }, 'Done')
   socket.write(res.return, () => socket.end())
 }))
 
-server.listen(argv, (err) => {
+server.listen(argv, err => {
   if (err) {
     log.error(err, 'Listen failed')
     return process.exit(2)
