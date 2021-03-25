@@ -14,7 +14,7 @@
 
     {
       overlay = final: prev: {
-        wcu = prev.callPackage ./package.nix {
+        tsdns = prev.callPackage ./package.nix {
           mkNode = nix-node-package.lib.nix-node-package prev;
         };
       };
@@ -22,8 +22,12 @@
       defaultPackage = forAllSystems (system: (import nixpkgs {
         inherit system;
         overlays = [ self.overlay ];
-      }).wcu);
+      }).tsdns);
 
+
+      nixosModules = {
+        tsdns = import ./module.nix;
+      };
     };
 }
 
