@@ -1,3 +1,10 @@
+
+# custom
+
 node_modules
-package-lock.json
 *.bak
+
+# node
+
+yarn-error.log
+false
