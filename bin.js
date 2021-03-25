@@ -71,3 +71,7 @@ load()
 if (!argv.n) {
   fs.watch(settings, load)
 }
+
+process.on('SIGHUP', () => {
+  load()
+})

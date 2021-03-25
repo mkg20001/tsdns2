@@ -25,7 +25,7 @@ in
   };
 
   config = mkIf (cfg.enable) {
-    environment.etc."tsdns.ini".text = cfg.config;
+    environment.etc."tsdns/tsdns.ini".text = cfg.config; # we need this in a folder for reloading to work
 
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPorts = [ 41144 ];
@@ -41,8 +41,8 @@ in
       serviceConfig = {
         Type = "simple";
         DynamicUser = true;
-        ReadWritePaths = "/etc/static/tsdns.ini";
-        ExecStart = "${tsdns}/bin/tsdns -c /etc/static/tsdns.ini -h ::";
+        ReadWritePaths = "/etc/tsdns";
+        ExecStart = "${tsdns}/bin/tsdns -c /etc/tsdns/tsdns.ini -h ::";
       };
     };
   };
