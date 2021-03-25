@@ -25,10 +25,6 @@ in
   };
 
   config = mkIf (cfg.enable) {
-    users.users.tsdns = {
-      uid = config.ids.uids.tsdns;
-    };
-
     environment.etc."tsdns.ini".text = cfg.config;
 
     networking.firewall = mkIf cfg.openFirewall {
@@ -44,15 +40,11 @@ in
 
       serviceConfig = {
         Type = "simple";
-        User = "tsdns";
         DynamicUser = true;
-        ReadWritePaths = "/etc/tsdns.ini";
-        ExecStart = "${tsdns}/bin/tsdns -c /etc/tsdns.ini -h ::";
+        ReadWritePaths = "/etc/static/tsdns.ini";
+        ExecStart = "${tsdns}/bin/tsdns -c /etc/static/tsdns.ini -h ::";
       };
     };
-
-    ids.gids.tsdns = 360;
-    ids.uids.tsdns = 360;
   };
 }
 
